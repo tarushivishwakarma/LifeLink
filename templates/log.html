@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Inventory Log & Transactions{% endblock %}
+{% block heading %}Blood Bank Central Ledger{% endblock %}
+{% block sub %}Authorized personnel ledger for recording stock movements, camp collections, hospital dispatches, and quality disposal.{% endblock %}
+
+{% block content %}
+<div class="split form-triple-split">
+  <!-- Record Donation Form -->
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Record Donation</h2>
+      <span class="tag safe">Inflow</span>
+    </div>
+    <p class="hint">Log walk-in or mobile drive unit collections into active inventory.</p>
+
+    <form id="donationForm" class="stacked-form">
+      <div class="form-group">
+        <label for="donGroup">Blood Group *</label>
+        <select id="donGroup" name="blood_group" class="grp select-input" required></select>
+      </div>
+
+      <div class="form-group">
+        <label for="donUnits">Units Collected *</label>
+        <input type="number" id="donUnits" name="units" min="1" max="50" value="1" required>
+      </div>
+
+      <div class="form-group">
+        <label for="donRemarks">Remarks / Camp Origin</label>
+        <input type="text" id="donRemarks" name="remarks" placeholder="e.g. City College Camp" maxlength="100">
+      </div>
+
+      <button type="submit" class="btn-primary btn-block">Log Donation Units</button>
+    </form>
+  </section>
+
+  <!-- Record Direct Hospital Issue Form -->
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Emergency Hospital Issue</h2>
+      <span class="tag critical">Outflow</span>
+    </div>
+    <p class="hint">Direct stock issuance to accredited healthcare centers.</p>
+
+    <form id="requestForm" class="stacked-form">
+      <div class="form-group">
+        <label for="issueHospital">Receiving Hospital *</label>
+        <input type="text" id="issueHospital" name="hospital" placeholder="e.g. District General Hospital" required maxlength="100">
+      </div>
+
+      <div class="form-group">
+        <label for="issueGroup">Blood Group *</label>
+        <select id="issueGroup" name="blood_group" class="grp select-input" required></select>
+      </div>
+
+      <div class="form-group">
+        <label for="issueUnits">Units Issued *</label>
+        <input type="number" id="issueUnits" name="units" min="1" max="50" value="1" required>
+      </div>
+
+      <button type="submit" class="btn-secondary btn-block">Dispatch Units</button>
+    </form>
+  </section>
+
+  <!-- Record Expiry Write-Off Form -->
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Record Expiry Write-off</h2>
+      <span class="tag low">Disposal</span>
+    </div>
+    <p class="hint">Record units decommissioned past 35/42-day RBC viability window.</p>
+
+    <form id="expiryForm" class="stacked-form">
+      <div class="form-group">
+        <label for="expGroup">Blood Group *</label>
+        <select id="expGroup" name="blood_group" class="grp select-input" required></select>
+      </div>
+
+      <div class="form-group">
+        <label for="expUnits">Units Expired *</label>
+        <input type="number" id="expUnits" name="units" min="1" max="50" value="1" required>
+      </div>
+
+      <div class="form-group">
+        <label for="expReason">Disposal Protocol Reason</label>
+        <input type="text" id="expReason" name="reason" placeholder="e.g. Past RBC 35-day CPDA viability" maxlength="100">
+      </div>
+
+      <button type="submit" class="btn-outline-danger btn-block">Decommission Units</button>
+    </form>
+  </section>
+</div>
+
+<p id="msg" class="msg" role="status"></p>
+
+<!-- Recent Transactions Audit Ledger -->
+<section class="panel">
+  <div class="panel-header">
+    <h2>Recent Inventory Audit Trail</h2>
+    <button type="button" id="refreshAuditBtn" class="btn-ghost-sm">Refresh Ledger</button>
+  </div>
+  <p class="hint">Immutable database audit trail recording every inventory movement and responsible operator.</p>
+
+  <div class="scroll">
+    <table class="data-table" id="auditTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Group</th>
+          <th>Type</th>
+          <th>Units</th>
+          <th>Reference / Remarks</th>
+          <th>Logged By</th>
+        </tr>
+      </thead>
+      <tbody id="auditBody">
+        <tr><td colspan="7" class="text-center text-muted">Retrieving audit transactions…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Admin Maintenance Controls -->
+<section class="panel danger-panel">
+  <div class="panel-header">
+    <h2>Academic Demonstration Controls</h2>
+    <span class="badge-role-admin">Administrator</span>
+  </div>
+  <p class="hint">Resets all synthetic transactions, shifts dates to end yesterday, and reloads clean baseline datasets.</p>
+  <button class="btn-outline-danger" id="resetBtn" type="button">Restore Academic Demo Datasets</button>
+</section>
+{% endblock %}

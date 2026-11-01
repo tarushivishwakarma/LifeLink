@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+{% block heading %}Sign in to LifeLink{% endblock %}
+{% block sub %}Access your personalized dashboard, donor availability, or hospital requisition management.{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Welcome Back</h2>
+      <p class="text-muted">Enter your system credentials below.</p>
+    </div>
+
+    <form method="POST" action="/login" class="stacked-form">
+      <input type="hidden" name="next" value="{{ next or '' }}">
+
+      <div class="form-group">
+        <label for="username">Username or Email *</label>
+        <input type="text" id="username" name="username" required autofocus placeholder="e.g. admin or donor1">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password *</label>
+        <input type="password" id="password" name="password" required placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="btn-primary btn-block">Sign In</button>
+    </form>
+
+    <div class="demo-credentials-box">
+      <h4>Academic Evaluation Quick-Fill</h4>
+      <p class="hint">Click any role below to populate sample credentials instantly:</p>
+      <div class="demo-btn-group">
+        <button type="button" class="btn-demo-chip" onclick="fillCreds('admin', 'admin123')">
+          <strong>Admin</strong> (admin / admin123)
+        </button>
+        <button type="button" class="btn-demo-chip" onclick="fillCreds('donor1', 'donor123')">
+          <strong>Donor</strong> (donor1 / donor123)
+        </button>
+        <button type="button" class="btn-demo-chip" onclick="fillCreds('requester1', 'requester123')">
+          <strong>Requester</strong> (requester1 / requester123)
+        </button>
+      </div>
+    </div>
+
+    <div class="auth-footer">
+      <span>Don't have an account yet?</span>
+      <a href="{{ url_for('register') }}">Create an account</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function fillCreds(u, p) {
+  document.getElementById("username").value = u;
+  document.getElementById("password").value = p;
+}
+</script>
+{% endblock %}
+

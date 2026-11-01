@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Camp Planner{% endblock %}
+{% block heading %}Blood Donation Camp Planner{% endblock %}
+{% block sub %}Calculates targeted collection quotas to restore all blood groups to a safe 10-day operational buffer.{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-header">
+    <h2>Targeted Drive Requirements</h2>
+    <span class="badge-neutral">Target: 10 Days Cover</span>
+  </div>
+  <p class="hint">Invite counts incorporate an 80% medical screening pass yield (i.e. invites = deficit &divide; 0.8).</p>
+
+  <div class="scroll">
+    <table id="campTable" class="data-table">
+      <thead>
+        <tr>
+          <th>Blood Group</th>
+          <th>Current Cover</th>
+          <th>Deficit (Units Short)</th>
+          <th>Recommended Donors to Invite</th>
+          <th>Priority Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="6" class="text-center text-muted">Calculating camp collection quotas…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel note-panel">
+  <h3>Donation Camp Planning Guidelines</h3>
+  <div class="methodology-grid">
+    <div>
+      <strong>Target Reserve Threshold</strong>
+      <p>Target cover is established at 10 days of projected average daily consumption to buffer unforeseen transport delays or emergency spikes.</p>
+    </div>
+    <div>
+      <strong>Screening Yield Factor (80%)</strong>
+      <p>In accordance with national blood transfusion standards, approximately 20% of volunteer donors are deferred due to transient low hemoglobin, blood pressure, or recent travel.</p>
+    </div>
+    <div>
+      <strong>Targeted Outreach</strong>
+      <p>Focus recruitment drives on rare Rh-negative phenotypes (O-, A-, B-, AB-) which suffer from steep supply fragility.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block heading %}Create a LifeLink Account{% endblock %}
+{% block sub %}Register as a voluntary blood donor or authorized healthcare requisition requester.{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Account Registration</h2>
+      <p class="text-muted">Choose your role to get started.</p>
+    </div>
+
+    <form method="POST" action="/register" class="stacked-form">
+      <div class="form-group">
+        <label>I am registering as a: *</label>
+        <div class="role-selector">
+          <label class="radio-label">
+            <input type="radio" name="role" value="donor" checked id="roleDonor" onchange="toggleDonorFields()">
+            <span class="radio-custom">Voluntary Donor</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="role" value="requester" id="roleRequester" onchange="toggleDonorFields()">
+            <span class="radio-custom">Hospital / Requester</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="username">Username *</label>
+        <input type="text" id="username" name="username" required placeholder="Choose a unique username" minlength="3">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email" required placeholder="name@domain.com">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="password">Password *</label>
+          <input type="password" id="password" name="password" required placeholder="Min. 6 characters" minlength="6">
+        </div>
+        <div class="form-group half">
+          <label for="confirm_password">Confirm Password *</label>
+          <input type="password" id="confirm_password" name="confirm_password" required placeholder="Re-enter password">
+        </div>
+      </div>
+
+      <!-- Specific Donor Fields -->
+      <div id="donorSpecificFields">
+        <div class="form-group">
+          <label for="full_name">Full Legal Name</label>
+          <input type="text" id="full_name" name="full_name" placeholder="e.g. Aarav Sharma">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="blood_group">Blood Group</label>
+            <select id="blood_group" name="blood_group" class="select-input">
+              <option value="O+">O+</option>
+              <option value="A+">A+</option>
+              <option value="B+">B+</option>
+              <option value="AB+">AB+</option>
+              <option value="O-">O- (Universal Donor)</option>
+              <option value="A-">A-</option>
+              <option value="B-">B-</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+          <div class="form-group half">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" class="select-input">
+              <option value="M">Male (90-day rest interval)</option>
+              <option value="F">Female (120-day rest interval)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number">
+          </div>
+          <div class="form-group half">
+            <label for="area">Locality / Sector</label>
+            <input type="text" id="area" name="area" placeholder="e.g. Sector 12 or Civil Lines">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary btn-block">Complete Registration</button>
+    </form>
+
+    <div class="auth-footer">
+      <span>Already have an account?</span>
+      <a href="{{ url_for('login') }}">Sign In</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleDonorFields() {
+  const isDonor = document.getElementById("roleDonor").checked;
+  document.getElementById("donorSpecificFields").style.display = isDonor ? "block" : "none";
+}
+</script>
+{% endblock %}
+

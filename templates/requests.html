@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Blood Requests{% endblock %}
+{% block heading %}Blood Request & Emergency Dispatch{% endblock %}
+{% block sub %}Manage hospital emergency blood requisitions, track approval workflows, and record authorized fulfillment.{% endblock %}
+
+{% block content %}
+<div class="split form-table-split">
+  <!-- Submission Panel -->
+  <section class="panel request-form-panel">
+    <div class="panel-header">
+      <h2>Submit Blood Request</h2>
+      <span class="badge-role-requester">Requisition</span>
+    </div>
+    <p class="hint">Submit hospital requirements. Requests enter <strong>Pending</strong> triage before authorized dispatch.</p>
+
+    <form id="newRequestForm" class="stacked-form">
+      <div class="form-group">
+        <label for="reqHospital">Hospital / Healthcare Facility *</label>
+        <input type="text" id="reqHospital" name="hospital" required placeholder="e.g. City Trauma Centre" maxlength="100">
+      </div>
+
+      <div class="form-group">
+        <label for="reqPatient">Patient / Emergency Reference</label>
+        <input type="text" id="reqPatient" name="patient_name" placeholder="e.g. Ward 4 / Trauma Case #204" maxlength="100">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="reqGroup">Blood Group Required *</label>
+          <select id="reqGroup" name="blood_group" class="grp select-input" required></select>
+        </div>
+
+        <div class="form-group half">
+          <label for="reqUnits">Units (Bags) *</label>
+          <input type="number" id="reqUnits" name="units" min="1" max="50" value="1" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reqUrgency">Priority Level *</label>
+        <select id="reqUrgency" name="urgency" class="select-input">
+          <option value="Normal">Normal — Scheduled Surgical / Routine</option>
+          <option value="Urgent">Urgent — Severe Anemia / Critical Care</option>
+          <option value="Emergency">Emergency — Major Trauma / Massive Transfusion</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="reqNotes">Clinical Notes & Diagnosis</label>
+        <textarea id="reqNotes" name="notes" rows="2" placeholder="Pertinent indications (optional)"></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary btn-block" id="submitReqBtn">Submit Request</button>
+      <p id="reqFormMsg" class="msg" role="status"></p>
+    </form>
+  </section>
+
+  <!-- Requests Queue Panel -->
+  <section class="panel request-list-panel">
+    <div class="panel-header">
+      <div>
+        <h2>Active Requests Registry</h2>
+        <p class="hint">Lifecycle: <span class="badge-status-pending">Pending</span> &rarr; <span class="badge-status-approved">Approved</span> &rarr; <span class="badge-status-fulfilled">Fulfilled</span></p>
+      </div>
+      <div class="filter-controls">
+        <label class="sel-label" for="statusFilter">
+          Filter:
+          <select id="statusFilter" class="select-input">
+            <option value="all">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Fulfilled">Fulfilled</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="scroll">
+      <table class="data-table" id="requestsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Hospital</th>
+            <th>Patient / Ref</th>
+            <th>Group</th>
+            <th>Units</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="requestsBody">
+          <tr><td colspan="9" class="text-center text-muted">Loading blood requests…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-legend">
+      <small class="text-muted">
+        <strong>Fulfillment Policy:</strong> Marking a request as <em>Fulfilled</em> atomically verifies available stock and decrements the central inventory register. Insufficient reserves block fulfillment to prevent negative inventory balances.
+      </small>
+    </div>
+  </section>
+</div>
+{% endblock %}
+

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Alerts{% endblock %}
+{% block heading %}Inventory Alerts & Emergency Signals{% endblock %}
+{% block sub %}Real-time alerts for impending stockouts, abnormal demand spikes, expiry thresholds, and redistribution surplus.{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="panel-header">
+    <h2>Active Operational Alerts</h2>
+    <span class="hint">Sorted by urgency (Critical &gt; Low &gt; Advisory)</span>
+  </div>
+  <ul class="alerts-list" id="alerts">
+    <li class="loading-item">Scanning inventory vectors and demand standard deviations…</li>
+  </ul>
+</section>
+
+<section class="panel note-panel">
+  <h3>Alert Response Protocols</h3>
+  <div class="methodology-grid">
+    <div>
+      <strong class="text-critical">Critical Shortage (&lt; 3 days)</strong>
+      <p>Initiate emergency camp mobilization and direct phone invitations to registered Rh-compatible donors.</p>
+    </div>
+    <div>
+      <strong class="text-low">Demand Spike (z &ge; 2.0)</strong>
+      <p>Indicates sudden surge &ge; 2.0 standard errors above 60-day baseline (e.g. dengue epidemic, trauma incident).</p>
+    </div>
+    <div>
+      <strong class="text-info">Surplus Redistribution</strong>
+      <p>Units exceeding 21 days of cover flagged for transfer to neighboring district facilities before obsolescence.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

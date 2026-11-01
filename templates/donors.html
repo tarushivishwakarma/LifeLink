@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Donors Directory{% endblock %}
+{% block heading %}Voluntary Blood Donor Directory{% endblock %}
+{% block sub %}<span id="donorCount">Scanning donor database…</span>{% endblock %}
+
+{% block head_actions %}
+<div class="actions-group">
+  <a href="/register" class="btn-primary">Register New Donor</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="filter-bar">
+    <div class="filter-item">
+      <label for="groupSel">Blood Group:</label>
+      <select id="groupSel" class="select-input">
+        <option value="all">All Groups</option>
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label for="areaSel">Locality / Area:</label>
+      <select id="areaSel" class="select-input">
+        <option value="all">All Localities</option>
+      </select>
+    </div>
+
+    <div class="filter-item search-item">
+      <label for="donorSearch">Search Donor:</label>
+      <input type="text" id="donorSearch" class="text-input" placeholder="Search by name or number…">
+    </div>
+
+    <div class="filter-item filter-btn-item">
+      <button type="button" id="applyFiltersBtn" class="btn-secondary">Filter</button>
+      <button type="button" id="resetFiltersBtn" class="btn-ghost-sm">Reset</button>
+    </div>
+  </div>
+
+  <div class="sample-notice-banner">
+    <span class="badge-neutral">Synthetic Sample Data</span>
+    <span>Donor phone numbers are masked for public privacy. Direct unmasked contact details are accessible strictly to authorized administrators.</span>
+  </div>
+
+  <div class="donors-grid" id="donors">
+    <!-- Populated by script.js -->
+    <div class="loading-item">Retrieving donor profiles…</div>
+  </div>
+
+  <div class="disclaimer-box">
+    <strong>Mandatory Medical Screening Disclaimer:</strong>
+    <p>Automated rest intervals (90 days for males, 120 days for females) and availability records serve strictly as preliminary logistical indicators. Prior to every blood donation, all candidates must undergo in-person hemoglobin screening (&ge; 12.5 g/dL), blood pressure evaluation, and physician health assessment.</p>
+  </div>
+</section>
+{% endblock %}

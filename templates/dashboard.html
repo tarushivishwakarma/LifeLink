@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Blood Bank Operations Dashboard{% endblock %}
+{% block sub %}Real-time inventory metrics as of <strong id="asOf">…</strong>. Click any blood group bag to view its 14-day forecast.{% endblock %}
+
+{% block head_actions %}
+<div class="actions-group">
+  <a href="/requests" class="btn-primary">Request Blood</a>
+  <a href="/donors" class="btn-secondary">Find Eligible Donors</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="kpis-section">
+  <div class="kpis" id="kpis" aria-live="polite">
+    <!-- Populated dynamically via script.js -->
+    <div class="kpi loading-skeleton"><b>--</b><span>Loading units...</span></div>
+    <div class="kpi loading-skeleton"><b>--</b><span>Loading critical...</span></div>
+    <div class="kpi loading-skeleton"><b>--</b><span>Loading low...</span></div>
+    <div class="kpi loading-skeleton"><b>--</b><span>Loading donor target...</span></div>
+    <div class="kpi loading-skeleton"><b>--</b><span>Loading wastage...</span></div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h2>Inventory by Blood Group</h2>
+      <p class="hint">Bag fill represents safe operational coverage (full bag = 21+ days of reserve).</p>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot critical"></span> Critical (&lt; 3 days)</span>
+      <span class="legend-item"><span class="legend-dot low"></span> Low (&lt; 7 days)</span>
+      <span class="legend-item"><span class="legend-dot safe"></span> Safe (7+ days)</span>
+    </div>
+  </div>
+  <div class="bags" id="bags">
+    <!-- Rendered by script.js -->
+  </div>
+</section>
+
+<div class="split">
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Expiry & Wastage Tracking</h2>
+      <span class="badge-neutral">30-Day Window</span>
+    </div>
+    <p class="hint">Monitors blood units expiring before transfusion. Minimizing loss preserves rare Rh-negative reserves.</p>
+    <div class="scroll">
+      <table id="wastageTable" class="data-table">
+        <thead>
+          <tr>
+            <th>Blood Group</th>
+            <th>Current Units</th>
+            <th>Expired (30d)</th>
+            <th>Wastage Rate</th>
+            <th>Risk Level</th>
+          </tr>
+        </thead>
+        <tbody id="wastageBody">
+          <tr><td colspan="5" class="text-center text-muted">Calculating wastage statistics…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Emergency Surge & Alerts</h2>
+      <a href="/alerts" class="link-subtle">View all &rarr;</a>
+    </div>
+    <p class="hint">Surges detected via z-score statistical comparison against 60-day moving baselines.</p>
+    <ul class="alerts-compact" id="dashboardAlerts">
+      <li class="loading-item">Evaluating real-time demand patterns…</li>
+    </ul>
+  </section>
+</div>
+
+<section class="panel note-panel">
+  <h3>Forecasting Methodology & Transparency Notice</h3>
+  <p class="text-muted">
+    LifeLink applies mathematical time-series modeling rather than unverified black-box algorithms. 
+    Future 14-day demand estimates use a <strong>damped linear regression trend (NumPy polyfit)</strong> computed from the preceding 28 days of hospital issuance, bound by dynamic slope clipping to avert artificial runaway predictions. 
+    Inflow predictions reflect 14-day rolling mean donation rates. All records shown are synthetic academic simulations.
+  </p>
+</section>
+{% endblock %}

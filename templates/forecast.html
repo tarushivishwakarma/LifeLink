@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Forecast{% endblock %}
+{% block heading %}14-Day Demand & Shortage Forecast{% endblock %}
+{% block sub %}Projected blood inventory levels modeled from historical hospital demand and donor trends.{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="row header-row">
+    <div>
+      <h2 id="chartTitle">Blood Group Projection</h2>
+      <p class="hint">Combines 30 days of actual historical transactions with 14 days of predictive modeling.</p>
+    </div>
+    <div class="filter-controls">
+      <label class="sel-label" for="groupSel">
+        Select Blood Group:
+        <select id="groupSel" class="select-input"></select>
+      </label>
+    </div>
+  </div>
+
+  <div class="stats" id="fstats">
+    <!-- Populated by script.js -->
+  </div>
+
+  <div class="chart-wrapper">
+    <div class="chart-header">
+      <h3>Cumulative Inventory Trajectory</h3>
+      <span class="legend-note">Solid line = Actual recorded stock | Dashed line = Projected future reserve</span>
+    </div>
+    <div class="chart">
+      <canvas id="stockChart" aria-label="Stock history and 14-day projection graph"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-wrapper chart-sub">
+    <div class="chart-header">
+      <h3>Daily Flow: Inflow (Donations) vs Outflow (Hospital Issuance)</h3>
+      <span class="legend-note">30-day historical transaction volume</span>
+    </div>
+    <div class="chart short">
+      <canvas id="flowChart" aria-label="Historical donation and issuance bar chart"></canvas>
+    </div>
+  </div>
+
+  <div class="methodology-card">
+    <h4>Analytical Model Specifications</h4>
+    <div class="methodology-grid">
+      <div>
+        <strong>Demand Trajectory</strong>
+        <p>Computed using a first-order damped polynomial fit over the last 28 days of issuance data with conservative slope damping (capped at 15% of baseline) to avoid overshooting.</p>
+      </div>
+      <div>
+        <strong>Inflow & Wastage Assumption</strong>
+        <p>Inflow assumes a 14-day rolling mean collection rate; expiration rate is calculated from a 28-day moving average.</p>
+      </div>
+      <div>
+        <strong>Classification</strong>
+        <p>Deterministic time-series statistical modeling (NumPy/Pandas). Not machine learning or black-box inference.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
