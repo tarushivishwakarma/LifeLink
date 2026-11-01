@@ -97,9 +97,19 @@ app.config.update(
 )
 
 
+@app.after_request
+def add_security_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    return response
+
+
 # ---------------------------------------------------------------- database
 def conn():
-    c = sqlite3.connect(DB_PATH)
+    c = sqlite3.connect(DB_PATH, timeout=30.0)
+    c.execute("PRAGMA journal_mode=WAL;")
+    c.execute("PRAGMA busy_timeout=30000;")
     c.row_factory = sqlite3.Row
     return c
 
@@ -594,6 +604,25 @@ def profile():
                     return render_template("profile.html", user=user, donor=c.execute("SELECT * FROM donors WHERE user_id = ?", (user_id,)).fetchone(), msg="Profile updated successfully!")
 
         return render_template("profile.html", user=user, donor=donor_profile)
+
+
+@app.route("/health")
+def health_check():
+    """Lightweight health check endpoint for cloud load balancers and Render."""
+    try:
+        with conn() as c:
+            c.execute("SELECT 1").fetchone()
+        db_status = "connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+
+    is_healthy = db_status == "connected"
+    return jsonify({
+        "status": "healthy" if is_healthy else "degraded",
+        "database": db_status,
+        "service": "LifeLink",
+        "timestamp": datetime.now().isoformat()
+    }), (200 if is_healthy else 500)
 
 
 # --------------------------------------------------------------------- API Endpoints

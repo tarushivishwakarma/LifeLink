@@ -53,6 +53,11 @@ class LifeLinkTestCase(unittest.TestCase):
 
     # 1. Application startup and core routes
     def test_01_core_routes_status_ok(self):
+        # Health check endpoint
+        health_resp = self.client.get("/health")
+        self.assertEqual(health_resp.status_code, 200)
+        self.assertEqual(health_resp.get_json()["status"], "healthy")
+
         routes = ["/", "/forecast", "/requests", "/alerts", "/camp", "/donors", "/login", "/register"]
         for r in routes:
             resp = self.client.get(r)
